@@ -93,7 +93,6 @@ app.route('/api/users/:_id/exercises').post(async (req, res, next) => {
   try {
     await doc.save().then((data) => {
       console.log("Exercise saved");
-      console.log("The data is: " + doc);
     })
   }
   catch {
@@ -102,7 +101,6 @@ app.route('/api/users/:_id/exercises').post(async (req, res, next) => {
   }
   //saving the doc json in req for use in the next handler
   req.customData = doc;
-  console.log("The data is: " + doc);
   //CAlling the log handler function
   handleExerciseLog(userId, doc);
 
@@ -158,7 +156,6 @@ const listener = app.listen(process.env.PORT || 3000, () => {
 const handleExerciseLog = (userId, exercise) => {
   let array;
   let func_count;
-  console.log("here successfully");
   Log.findById({ _id: userId }).then((data) => {
     data.log.push(exercise);
     func_count = data.count;
@@ -172,7 +169,6 @@ const handleExerciseLog = (userId, exercise) => {
     //create new log for a new user  
     .catch((data) => {
       array = [exercise];
-      console.log("Im in catch.");
       let doc = new Log({ username: exercise.username, count: 1, _id: exercise.user_id, log: array });
       doc.save().then((data) => {
         console.log("Log created successfully" + data);
