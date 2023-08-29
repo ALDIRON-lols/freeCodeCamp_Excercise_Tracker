@@ -115,22 +115,17 @@ app.get('/api/users/:_id/logs', (req, res) => {
   let log_array;
   let { from, to, limit } = req.query;
   limit = Number(limit);
-
-
+  if(from != undefined){
+    from = new Date(from);
+  }
+  if(to != undefined){
+    to = new Date(to);
+  }
   Excercise.find({ user_id: req.params._id }, null, { limit: limit || 0 }).then((data) => {
     let array;
-    try {
-      from = new Date(from)
-
-    }
-    catch { }
-    try {
-      to = new Date(to)
-    }
-    catch { }
     array = data.map((x) => {
       date = new Date(x.date)
-      if ((date >= from || from == "Invalid Date") && (date <= to || to == "Invalid Date")) {
+      if ((date >= from || from === undefined) && (date <= to || to === undefined)) {
         let y = { description: x.description, duration: x.duration, date: x.date };
         return y;
       }
